@@ -11,6 +11,7 @@
 </head>
 <body>
 
+<!-- Chamada da navbar -->
 <div th:replace="~{navbar :: navbar}"></div>
 
 <main class="container py-4">
@@ -23,7 +24,7 @@
             <a th:href="@{/usuariolista}" class="dash-card card-blue">
                 <span class="card-icon">👥</span>
                 <span class="card-label">Usuários cadastrados</span>
-                <span class="card-count" th:text="${qtdUsuarios}">0</span>
+                <span class="card-count">0</span>
                 <span class="card-desc">Gerenciar usuários do sistema</span>
                 <span class="card-arrow">→</span>
             </a>
@@ -32,7 +33,7 @@
             <a th:href="@{/recursolista}" class="dash-card card-green">
                 <span class="card-icon">📦</span>
                 <span class="card-label">Meus recursos</span>
-                <span class="card-count" th:text="${qtdRecursos}">0</span>
+                <span class="card-count">0</span>
                 <span class="card-desc">Equipamentos e recursos disponíveis</span>
                 <span class="card-arrow">→</span>
             </a>
@@ -41,7 +42,7 @@
             <a th:href="@{/reservalista}" class="dash-card card-amber">
                 <span class="card-icon">📅</span>
                 <span class="card-label">Minhas reservas</span>
-                <span class="card-count" th:text="${qtdReservasAtivas}">0</span>
+                <span class="card-count">0</span>
                 <span class="card-desc">Reservas ativas</span>
                 <span class="card-arrow">→</span>
             </a>
@@ -51,9 +52,7 @@
     <div class="section-card card-proximas mb-4">
         <div class="section-card-header">
             <h2>📅 Próximas reservas</h2>
-
             <a th:href="@{/reservacadastrarhome}" class="btn btn-primary ms-auto">Cadastrar Reserva</a>
-
         </div>
 
         <table class="table-reservas">
@@ -68,17 +67,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(listaReservasAtivas)}">
+            <tr>
                 <td colspan="6" class="text-center text-secondary py-4">Nenhuma reserva próxima encontrada</td>
-            </tr>
-
-            <tr th:each="reserva : ${listaReservasAtivas}">
-                <td th:text="${reserva.id}"></td>
-                <td th:text="${reserva.colaboradorNome}"></td>
-                <td th:text="${reserva.recursoDescricao}"></td>
-                <td th:text="${#temporals.format(reserva.dataReserva, 'dd/MM/yyyy')}"></td>
-                <td th:text="${reserva.horaInicial}"></td>
-                <td th:text="${reserva.horaFinal}"></td>
             </tr>
             </tbody>
         </table>
@@ -87,8 +77,7 @@
     <div class="section-card card-canceladas mb-4">
         <div class="section-card-header">
             <h2>🚫 Reservas canceladas</h2>
-
-            <span class="ms-3" th:text="${qtdReservasCanceladas} + ' registro(s)'"></span>
+            <span class="ms-3">0 registro(s)</span>
         </div>
 
         <table class="table-reservas">
@@ -105,19 +94,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(listaReservasCanceladas)}">
+            <tr>
                 <td colspan="8" class="text-center text-secondary py-4">Nenhuma reserva cancelada encontrada</td>
-            </tr>
-
-            <tr th:each="reserva : ${listaReservasCanceladas}" class="row-cancelada">
-                <td th:text="${reserva.id}">1</td>
-                <td th:text="${reserva.colaboradorNome}">Lucas</td>
-                <td th:text="${reserva.recursoDescricao}">Capacete</td>
-                <td th:text="${#temporals.format(reserva.dataReserva, 'dd/MM/yyyy')}">10-10-2000</td>
-                <td th:text="${reserva.horaInicial}">10:00</td>
-                <td th:text="${reserva.horaFinal}">18:00</td>
-                <td th:text="${#temporals.format(reserva.dataCancelamento, 'dd/MM/yyyy')}">10-10-2000</td>
-                <td th:text="${reserva.observacaoCancelamento}">Nao vou mais usar</td>
             </tr>
             </tbody>
         </table>
