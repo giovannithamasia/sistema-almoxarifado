@@ -15,6 +15,6 @@ public class UsuarioService {
 
     public UsuarioEntity validarLogin(LoginDto dto) {
         return usuarioRepository.findByLoginAndSenha(dto.login(),dto.senha())
-                .orElseThrow(() -> new LoginInvalidoException("Login ou senha inválidos"));
+                .orElseThrow(() -> new LoginInvalidoException("Login ou senha inválidos."));
     }
 }

@@ -26,14 +26,13 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <span th:if="${session.usuarioLogado != null}" th:text="'Olá, ' + ${session.usuarioLogado.usuarioNome}"></span>
-                        <span th:unless="${session.usuarioLogado != null}">Olá, Usuário</span>
+                        <span th:if="${session.usuarioLogado}" th:text="'Olá, ' + ${session.usuarioLogado.usuarioNome}"></span>
+                        <span th:unless="${session.usuarioLogado}">Olá, Usuário</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item text-danger" th:href="@{/login}">Sair</a></li>
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}">Sair</a></li>
                     </ul>
                 </li>
-            </ul>
             </ul>
         </div>
 

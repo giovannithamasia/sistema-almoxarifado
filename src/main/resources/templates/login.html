@@ -24,19 +24,15 @@
                         <div class="mb-3">
                             <label for="login" class="form-label">Login</label>
                             <input type="text" class="form-control" id="login" th:field="*{login}" placeholder="Informe o Login" required>
-                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Erro no Login</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="senha" class="form-label">Senha</label>
                             <input type="password" class="form-control" id="senha" th:field="*{senha}" placeholder="Informe a senha" required>
-
-                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}">Erro na senha</div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Entrar</button>
                     </form>
-
 
                 </div>
             </div>

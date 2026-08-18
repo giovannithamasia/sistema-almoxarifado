@@ -16,6 +16,14 @@ public class PageController {
 
     private final UsuarioService usuarioService;
 
+    @GetMapping("/")
+    public String raiz(HttpSession session) {
+        if (SessaoUtil.obterSessao(session) != null) {
+            return "redirect:/home";
+        }
+
+        return "redirect:/login";
+    }
 
     @GetMapping("/login")
     public String getLogin(@ModelAttribute("login") LoginDto loginDto,
@@ -23,13 +31,13 @@ public class PageController {
         model.addAttribute("login", loginDto);
         return "login";
     }
+
     @GetMapping("/home")
-    public String getHome(HttpSession session, Model model){
-        if (SessaoUtil.ObterSessao(session) == null) {
+    public String getHome(HttpSession session){
+        if (SessaoUtil.obterSessao(session) == null) {
             return "redirect:/login";
         }
 
         return "home";
     }
-
 }
