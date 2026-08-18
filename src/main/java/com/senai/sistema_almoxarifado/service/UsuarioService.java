@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioEntity validarLogin(LoginDto dto) {
         return usuarioRepository.findByLoginAndSenha(dto.login(),dto.senha())
