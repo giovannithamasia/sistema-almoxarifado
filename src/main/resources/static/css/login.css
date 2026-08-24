@@ -1,0 +1,258 @@
+/*
+ * CSS Customizado - Tela de Login
+ * Design baseado na especificação Figma (sem Bootstrap)
+ *
+ * Cores principais:
+ * - Background: #0b0d11
+ * - Primary (botão, logo): #f59e0b
+ * - Texto principal: #e8eaf0
+ * - Texto secundário: #6b7591
+ * - Borda input: #1e2432
+ * - Erro: #f87171
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0b0d11;
+    min-height: 100vh;
+}
+
+/* Container centralizado com grid decorativo de fundo */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #0b0d11;
+
+    /* Grid decorativo: linhas horizontais e verticais com 40px de espaçamento */
+    background-image:
+        linear-gradient(rgba(26, 32, 53, 0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 32, 53, 0.25) 1px, transparent 1px);
+    background-size: 40px 40px;
+    padding: 20px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 420px;
+    background-color: transparent;
+}
+
+/* Logo FerraSul: hexágono + wordmark */
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.logo-hexagon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 12px;
+}
+
+.logo-text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #e8eaf0;
+    letter-spacing: -0.02em;
+}
+
+/* Título principal: "ACESSAR PAINEL" */
+.form-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 36px;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    color: #e8eaf0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Subtítulo com destaque para "funcionário do almoxarifado" */
+.form-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #6b7591;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.form-subtitle .highlight {
+    font-weight: 500;
+    color: #e8eaf0;
+}
+
+/* FE-01/FE-02: Mensagem de erro */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    border-radius: 3px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+}
+
+.error-message span {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 11px;
+    color: #f87171;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+/* Labels: USUÁRIO e SENHA */
+.field-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #6b7591;
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+/* Inputs de formulário */
+.form-input {
+    width: 100%;
+    background-color: #12151c;
+    border: 1px solid #1e2432;
+    border-radius: 3px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #e8eaf0;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.form-input::placeholder {
+    color: #3d4660;
+}
+
+.form-input:focus {
+    border-color: #f59e0b;
+}
+
+/* FE-02: Estado de erro em campos vazios */
+.form-input.error {
+    border-color: #f87171;
+}
+
+/* Wrapper para campo de senha com botão toggle */
+.password-wrapper {
+    position: relative;
+}
+
+.form-input.password-input {
+    padding-right: 44px; /* Espaço para o botão toggle */
+}
+
+/* Botão toggle de mostrar/ocultar senha */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password .eye-icon {
+    width: 16px;
+    height: 16px;
+    fill: #3d4660;
+    transition: fill 0.15s;
+}
+
+.toggle-password:hover .eye-icon {
+    fill: #f59e0b;
+}
+
+.toggle-password.active .eye-icon {
+    fill: #f59e0b;
+}
+
+/* Botão de submit: "ENTRAR NO SISTEMA" */
+.submit-btn {
+    width: 100%;
+    padding: 13px;
+    background-color: #f59e0b;
+    color: #0b0d11;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    margin-top: 16px;
+}
+
+.submit-btn:hover {
+    background-color: #d97706;
+}
+
+.submit-btn:disabled {
+    background-color: #b47a08;
+    cursor: not-allowed;
+}
+
+.btn-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Rodapé com textos de acesso restrito */
+.footer {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.footer-line-1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #3d4660;
+    margin-bottom: 4px;
+}
+
+.footer-line-2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #2e3547;
+}
+

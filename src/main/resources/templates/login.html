@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+  Tela de Login - Sistema de Controle de Estoque do Almoxarifado
+  RF-001: Realizar Login
+
+  Integração Thymeleaf:
+  - th:action="@{/login}": POST para LoginController
+  - th:object="${login}": bind com LoginDto
+  - th:field="*{campo}": mapeamento automático de campos
+  - th:if="${erroLogin}": exibe mensagem de erro do controller
+-->
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - FerraSul Sistemas</title>
+
+    <!-- Fontes Google: Outfit, Barlow Condensed, Inter, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Barlow+Condensed:wght@600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <!-- CSS customizado -->
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+<main class="login-container">
+    <div class="login-form">
+        <!-- Logo FerraSul -->
+        <div class="logo-section">
+            <div class="logo-hexagon">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 0L31.5 8V24L16 32L0.5 24V8L16 0Z" fill="#f59e0b"/>
+                    <path d="M16 8L22 11V21L16 24L10 21V11L16 8Z" fill="white"/>
+                </svg>
+            </div>
+            <div class="logo-text">FerraSul</div>
+        </div>
+
+        <h1 class="form-title">ACESSAR PAINEL</h1>
+        <p class="form-subtitle">Área restrita ao <span class="highlight">funcionário do almoxarifado</span>.<br>Informe seu usuário e senha cadastrados no sistema.</p>
+
+        <!-- FE-01: Mensagem de erro para credenciais inválidas -->
+        <div class="error-message" th:if="${erroLogin}">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM7 4H9V9H7V4ZM7 11H9V13H7V11Z" fill="#f87171"/>
+            </svg>
+            <span th:text="${erroLogin}">Usuário ou senha inválidos.</span>
+        </div>
+
+        <!-- Formulário de login -->
+        <form th:action="@{/login}" th:object="${login}" method="post" novalidate id="loginForm">
+            <div class="form-group">
+                <label for="login" class="field-label">USUÁRIO</label>
+                <div class="input-wrapper">
+                    <!-- autocomplete="username": padrão para campos de usuário -->
+                    <input type="text" class="form-input" id="login" th:field="*{login}" placeholder="seu usuario" autocomplete="username" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="senha" class="field-label">SENHA</label>
+                <div class="input-wrapper password-wrapper">
+                    <!-- autocomplete="current-password": padrão para campos de senha atual -->
+                    <input type="password" class="form-input" id="senha" th:field="*{senha}" placeholder="••••••••" autocomplete="current-password" required>
+
+                    <!-- Botão toggle senha: tabindex="-1" não entra no fluxo TAB -->
+                    <button type="button" class="toggle-password" id="togglePassword" tabindex="-1" title="Mostrar senha">
+                        <svg class="eye-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3C4.5 3 1.5 5.5 0 8C1.5 10.5 4.5 13 8 13C11.5 13 14.5 10.5 16 8C14.5 5.5 11.5 3 8 3ZM8 11C6.3 11 5 9.7 5 8C5 6.3 6.3 5 8 5C9.7 5 11 6.3 11 8C11 9.7 9.7 11 8 11ZM8 6.5C7.2 6.5 6.5 7.2 6.5 8C6.5 8.8 7.2 9.5 8 9.5C8.8 9.5 9.5 8.8 9.5 8C9.5 7.2 8.8 6.5 8 6.5Z" fill="#3d4660"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-text">ENTRAR NO SISTEMA</span>
+            </button>
+        </form>
+
+        <div class="footer">
+            <div class="footer-line-1">ACESSO RESTRITO AOS FUNCIONÁRIOS DO ALMOXARIFADO</div>
+            <div class="footer-line-2">2026 FERRASUL SISTEMAS — SANTA CATARINA</div>
+        </div>
+    </div>
+</main>
+
+<!-- JavaScript: validações front-end e toggle senha -->
+<script th:src="@{/js/login.js}"></script>
+</body>
+</html>

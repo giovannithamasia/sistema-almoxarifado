@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-navbar-custom py-1" th:fragment="navbar">
+    <div class="container-fluid">
+
+        <a class="navbar-brand py-0 ms-5" th:href="@{/home}">
+            <img th:src="@{/img/logo.png}" alt="Logo" class="logo-navbar-menu">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/usuariolista}">Usuários</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/recursolista}">Recursos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reservalista}">Reservas</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto me-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <span th:if="${session.usuarioLogado}" th:text="'Olá, ' + ${session.usuarioLogado.usuarioNome}"></span>
+                        <span th:unless="${session.usuarioLogado}">Olá, Usuário</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}">Sair</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
