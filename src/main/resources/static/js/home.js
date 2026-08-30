@@ -21,16 +21,4 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
         });
     }
-    
-    // Adicionar efeito de hover nos cards estatísticos
-    const statCards = document.querySelectorAll('.stat-card');
-    statCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
 });
