@@ -3,11 +3,11 @@ spring:
     name: sistema-almoxarifado
   datasource:
     url: jdbc:mysql://localhost:3306/saep_db
-    username: root
-    password:
+    username: saep_user
+    password: saep_password
   jpa:
       hibernate:
-       ddl-auto: none
+       ddl-auto: update
       show-sql: true
       properties:
         hibernate:

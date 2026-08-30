@@ -1,0 +1,27 @@
+.navbar {
+    background-color: #0b0d11;
+    border-bottom: 2px solid #f59e0b;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #f59e0b !important;
+}
+
+.nav-link {
+    color: #e8eaf0 !important;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #f59e0b !important;
+}
+
+.dropdown-item {
+    color: #333;
+}
+
+.dropdown-item:hover {
+    background-color: #f59e0b;
+    color: #0b0d11;
+}
