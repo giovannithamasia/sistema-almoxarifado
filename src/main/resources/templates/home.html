@@ -1,17 +1,50 @@
 <!doctype html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/estilo.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" href="/css/estilo.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
 
-<div th:replace="~{navbar :: navbar}"></div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home">
+            FerraSul Almoxarifado
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/produtolista">Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/movimentacaolista">Movimentações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/alertas">Alertas</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto me-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Usuário
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item text-danger" href="/logout">Sair</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <main class="container py-4">
 
@@ -20,29 +53,29 @@
 
     <div class="row g-3 mb-4">
         <div class="col-12 col-sm-4">
-            <a th:href="@{/usuariolista}" class="dash-card card-blue">
-                <span class="card-icon">👥</span>
-                <span class="card-label">Usuários cadastrados</span>
-                <span class="card-count">0</span>
-                <span class="card-desc">Gerenciar usuários do sistema</span>
-                <span class="card-arrow">→</span>
-            </a>
-        </div>
-        <div class="col-12 col-sm-4">
-            <a th:href="@{/recursolista}" class="dash-card card-green">
+            <a href="/produtolista" class="dash-card card-blue">
                 <span class="card-icon">📦</span>
-                <span class="card-label">Meus recursos</span>
+                <span class="card-label">Produtos Cadastrados</span>
                 <span class="card-count">0</span>
-                <span class="card-desc">Equipamentos e recursos disponíveis</span>
+                <span class="card-desc">Gerenciar produtos do estoque</span>
                 <span class="card-arrow">→</span>
             </a>
         </div>
         <div class="col-12 col-sm-4">
-            <a th:href="@{/reservalista}" class="dash-card card-amber">
-                <span class="card-icon">📅</span>
-                <span class="card-label">Minhas reservas</span>
+            <a href="/movimentacaolista" class="dash-card card-green">
+                <span class="card-icon">📊</span>
+                <span class="card-label">Movimentações</span>
                 <span class="card-count">0</span>
-                <span class="card-desc">Reservas ativas</span>
+                <span class="card-desc">Entradas e saídas recentes</span>
+                <span class="card-arrow">→</span>
+            </a>
+        </div>
+        <div class="col-12 col-sm-4">
+            <a href="/alertas" class="dash-card card-amber">
+                <span class="card-icon">⚠️</span>
+                <span class="card-label">Alertas de Estoque</span>
+                <span class="card-count">0</span>
+                <span class="card-desc">Produtos abaixo do mínimo</span>
                 <span class="card-arrow">→</span>
             </a>
         </div>
@@ -50,51 +83,24 @@
 
     <div class="section-card card-proximas mb-4">
         <div class="section-card-header">
-            <h2>📅 Próximas reservas</h2>
-            <a th:href="@{/reservacadastrarhome}" class="btn btn-primary ms-auto">Cadastrar Reserva</a>
+            <h2>📅 Movimentações Recentes</h2>
+            <a href="/movimentacaocadastrar" class="btn btn-primary ms-auto">Registrar Movimentação</a>
         </div>
 
         <table class="table-reservas">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Colaborador</th>
-                <th>Recurso</th>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
                 <th>Data</th>
-                <th>Hora Inicial</th>
-                <th>Hora Final</th>
+                <th>Responsável</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td colspan="6" class="text-center text-secondary py-4">Nenhuma reserva próxima encontrada</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section-card card-canceladas mb-4">
-        <div class="section-card-header">
-            <h2>🚫 Reservas canceladas</h2>
-            <span class="ms-3">0 registro(s)</span>
-        </div>
-
-        <table class="table-reservas">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Colaborador</th>
-                <th>Recurso</th>
-                <th>Data</th>
-                <th>Hora Inicial</th>
-                <th>Hora Final</th>
-                <th>Data do Cancelamento</th>
-                <th>Motivo do Cancelamento</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td colspan="8" class="text-center text-secondary py-4">Nenhuma reserva cancelada encontrada</td>
+                <td colspan="6" class="text-center text-secondary py-4">Nenhuma movimentação registrada</td>
             </tr>
             </tbody>
         </table>
