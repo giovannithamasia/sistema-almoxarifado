@@ -12,13 +12,13 @@
         <div class="collapse navbar-collapse" id="menuPrincipal">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/produtolista">Produtos</a>
+                    <a class="nav-link active" href="/produtos">Produtos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/movimentacaolista">Movimentações</a>
+                    <a class="nav-link active" href="/movimentacoes">Movimentações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/alertas">Alertas</a>
+                    <a class="nav-link active" href="/alertas">Alertas</a>
                 </li>
             </ul>
 
@@ -26,7 +26,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Usuário
+                        <span th:if="${usuarioLogado != null}" th:text="'Olá, ' + ${usuarioLogado.usuarioNome()}"></span>
+                        <span th:unless="${usuarioLogado != null}">Olá, Usuário</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item text-danger" href="/logout">Sair</a></li>

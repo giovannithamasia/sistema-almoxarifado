@@ -29,15 +29,17 @@
         </div>
 
         <div class="navbar-menu">
-            <a href="/produtolista" class="nav-link">Produtos</a>
-            <a href="/movimentacaolista" class="nav-link">Movimentações</a>
+            <a href="/produtos" class="nav-link">Produtos</a>
+            <a href="/movimentacoes" class="nav-link">Movimentações</a>
             <a href="/alertas" class="nav-link">Alertas</a>
         </div>
 
         <div class="navbar-user">
             <div class="user-dropdown">
                 <button class="user-toggle">
-                    <span class="user-name">Usuário</span>
+
+                    <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Usuário'}"></span>
+
                     <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 8L10 4H2L6 8Z" fill="#6b7591"/>
                     </svg>

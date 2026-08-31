@@ -2,6 +2,7 @@ package com.senai.sistema_almoxarifado.controller;
 
 import com.senai.sistema_almoxarifado.dto.LoginDto;
 import com.senai.sistema_almoxarifado.service.UsuarioService;
+import com.senai.sistema_almoxarifado.sessoes.SessaoDto;
 import com.senai.sistema_almoxarifado.sessoes.SessaoUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,46 @@ public class PageController {
     }
 
     @GetMapping("/home")
-    public String getHome(HttpSession session){
+    public String getHome(HttpSession session,Model model){
+        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
+
         if (SessaoUtil.obterSessao(session) == null) {
             return "redirect:/login";
         }
 
+        model.addAttribute("usuarioLogado", usuarioLogado);
+
         return "home";
     }
+
+    @GetMapping("/produtos")
+    public String getProdutos(HttpSession session,Model model){
+        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
+        if (usuarioLogado == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("usuarioLogado", usuarioLogado);
+        return "produtos";
+    }
+
+    @GetMapping("/movimentacoes")
+    public String getMovimentacoes(HttpSession session,Model model){
+        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
+        if (usuarioLogado == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("usuarioLogado", usuarioLogado);
+        return "movimentacoes";
+    }
+
+    @GetMapping("/alertas")
+    public String getAlertas(HttpSession session,Model model){
+        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
+        if (usuarioLogado == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("usuarioLogado", usuarioLogado);
+        return "alertas";
+    }
+
 }
