@@ -46,34 +46,4 @@ public class PageController {
         return "home";
     }
 
-    @GetMapping("/produtos")
-    public String getProdutos(HttpSession session,Model model){
-        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
-        if (usuarioLogado == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("usuarioLogado", usuarioLogado);
-        return "produtos";
-    }
-
-    @GetMapping("/movimentacoes")
-    public String getMovimentacoes(HttpSession session,Model model){
-        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
-        if (usuarioLogado == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("usuarioLogado", usuarioLogado);
-        return "movimentacoes";
-    }
-
-    @GetMapping("/alertas")
-    public String getAlertas(HttpSession session,Model model){
-        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
-        if (usuarioLogado == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("usuarioLogado", usuarioLogado);
-        return "alertas";
-    }
-
 }
