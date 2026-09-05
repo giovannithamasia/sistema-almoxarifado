@@ -26,7 +26,7 @@
 
             <!-- RF-004: Formulário de Pesquisa -->
             <form th:action="@{/produtolista}" method="get" class="d-flex">
-                <input class="form-control me-2" type="search" name="termo" placeholder="Buscar produto..." aria-label="Search">
+                <input class="form-control me-2" type="search" name="termo" th:value="${termo}" placeholder="Buscar produto..." aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
         </div>
@@ -61,8 +61,8 @@
                         <td th:text="${produto.estoqueMinimo}">10</td>
                         <td>
                             <!-- Botões de Editar e Excluir (RF-005 e RF-006) -->
-                            <a class="btn btn-sm btn-warning" th:href="@{/produtoatualizar/{id}(id=${produto.id()})}">Editar</a>
-                            <button th:data-id="${produto.id()}" class="excluir btn btn-sm btn-danger">Excluir</button>
+                            <a class="btn btn-sm btn-warning" th:href="@{/produtoatualizar/{id}(id=${produto.id})}">Editar</a>
+                            <button th:data-id="${produto.id}" class="excluir btn btn-sm btn-danger">Excluir</button>
                         </td>
                     </tr>
 
