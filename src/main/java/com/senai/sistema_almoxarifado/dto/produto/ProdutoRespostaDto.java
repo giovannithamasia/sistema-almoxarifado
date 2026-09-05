@@ -1,4 +1,4 @@
-package com.senai.sistema_almoxarifado.dto;
+package com.senai.sistema_almoxarifado.dto.produto;
 
 import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
 

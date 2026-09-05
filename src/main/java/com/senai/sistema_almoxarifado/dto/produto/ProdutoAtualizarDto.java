@@ -1,4 +1,4 @@
-package com.senai.sistema_almoxarifado.dto;
+package com.senai.sistema_almoxarifado.dto.produto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

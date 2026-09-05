@@ -1,5 +1,6 @@
-package com.senai.sistema_almoxarifado.dto;
+package com.senai.sistema_almoxarifado.dto.produto;
 
+import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -27,4 +28,16 @@ public record ProdutoDto(
       @PositiveOrZero
       Integer estoqueMinimo
 ) {
+
+      public ProdutoEntity toProduto(){
+            ProdutoEntity produto = new ProdutoEntity();
+
+            produto.setNome(this.nome);
+            produto.setCodigo(this.codigo);
+            produto.setCaracteristicas(this.caracteristicas);
+            produto.setEstoqueAtual(this.estoqueAtual);
+            produto.setEstoqueMinimo(this.estoqueMinimo);
+
+            return produto;
+      }
 }

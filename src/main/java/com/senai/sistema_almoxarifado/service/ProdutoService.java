@@ -1,7 +1,9 @@
 package com.senai.sistema_almoxarifado.service;
 
-import com.senai.sistema_almoxarifado.dto.ProdutoRespostaDto;
+import com.senai.sistema_almoxarifado.dto.produto.ProdutoDto;
+import com.senai.sistema_almoxarifado.dto.produto.ProdutoRespostaDto;
 import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
+import com.senai.sistema_almoxarifado.exceptions.ProdutoCadastradoException;
 import com.senai.sistema_almoxarifado.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,13 @@ public class ProdutoService {
         return produtos.stream()
                 .map(ProdutoRespostaDto::toProdutoRespostaDto)
                 .toList();
+    }
+
+    public void cadastrarProduto(ProdutoDto produtoDto){
+        if (repository.existsByCodigo(produtoDto.codigo())){
+            throw new ProdutoCadastradoException("Produto já cadastrado");
+        }
+
+        repository.save(produtoDto.toProduto());
     }
 }

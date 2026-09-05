@@ -1,6 +1,7 @@
 package com.senai.sistema_almoxarifado.controller.produto;
 
-import com.senai.sistema_almoxarifado.dto.ProdutoRespostaDto;
+import com.senai.sistema_almoxarifado.dto.produto.ProdutoDto;
+import com.senai.sistema_almoxarifado.dto.produto.ProdutoRespostaDto;
 import com.senai.sistema_almoxarifado.service.ProdutoService;
 import com.senai.sistema_almoxarifado.sessoes.SessaoUtil;
 import jakarta.servlet.http.HttpSession;
@@ -37,5 +38,16 @@ public class ProdutoPageController {
         model.addAttribute("termo", termo);
 
         return "produtos/produtolista";
+    }
+
+    @GetMapping("/produtocadastrar")
+    public String getCadastrarProduto(HttpSession session, Model model) {
+        if (SessaoUtil.obterSessao(session) == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("produtoDto", new ProdutoDto(null, null, null, null, null));
+
+        return "produtos/produtocadastrar";
     }
 }
