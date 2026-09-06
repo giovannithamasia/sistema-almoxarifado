@@ -1,9 +1,11 @@
 package com.senai.sistema_almoxarifado.service;
 
+import com.senai.sistema_almoxarifado.dto.produto.ProdutoAtualizarDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoRespostaDto;
 import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
 import com.senai.sistema_almoxarifado.exceptions.ProdutoCadastradoException;
+import com.senai.sistema_almoxarifado.exceptions.ProdutoNaoEncontradoException;
 import com.senai.sistema_almoxarifado.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,5 +40,28 @@ public class ProdutoService {
         }
 
         repository.save(produtoDto.toProduto());
+    }
+
+    public ProdutoEntity buscarProdutoPorId(Long id){
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ProdutoNaoEncontradoException("Produto não encontrado"));
+    }
+
+    public void atualizarProduto(Long id, ProdutoAtualizarDto produtoAtualizarDto){
+        ProdutoEntity produto = buscarProdutoPorId(id);
+
+        produto.setNome(produtoAtualizarDto.nome());
+        produto.setCaracteristicas(produtoAtualizarDto.caracteristicas());
+        produto.setEstoqueAtual(produtoAtualizarDto.estoqueAtual());
+        produto.setEstoqueMinimo(produtoAtualizarDto.estoqueMinimo());
+
+        repository.save(produto);
+    }
+
+    public void excluirProduto(Long id){
+        buscarProdutoPorId(id);
+
+        repository.deleteById(id);
     }
 }

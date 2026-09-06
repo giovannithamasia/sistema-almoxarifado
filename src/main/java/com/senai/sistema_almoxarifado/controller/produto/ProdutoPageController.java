@@ -1,7 +1,9 @@
 package com.senai.sistema_almoxarifado.controller.produto;
 
+import com.senai.sistema_almoxarifado.dto.produto.ProdutoAtualizarDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoRespostaDto;
+import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
 import com.senai.sistema_almoxarifado.service.ProdutoService;
 import com.senai.sistema_almoxarifado.sessoes.SessaoUtil;
 import jakarta.servlet.http.HttpSession;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -49,5 +52,20 @@ public class ProdutoPageController {
         model.addAttribute("produtoDto", new ProdutoDto(null, null, null, null, null));
 
         return "produtos/produtocadastrar";
+    }
+
+    @GetMapping("/produtoatualizar/{id}")
+    public String getProdutoAtualizar(@PathVariable("id") Long id,
+                                      Model model,
+                                      HttpSession session){
+        if (SessaoUtil.obterSessao(session) == null) {
+            return "redirect:/login";
+        }
+
+        ProdutoEntity produto = service.buscarProdutoPorId(id);
+
+        model.addAttribute("produtoAtualizacao",produto);
+
+        return "produtos/produtoatualizar";
     }
 }

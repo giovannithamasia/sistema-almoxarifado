@@ -6,6 +6,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public record ProdutoAtualizarDto(
+        Long id,
+        String codigo,
 
         @Size(min = 2, max = 45)
         @NotBlank
