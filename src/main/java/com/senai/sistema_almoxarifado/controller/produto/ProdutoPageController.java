@@ -37,8 +37,8 @@ public class ProdutoPageController {
         }
 
         model.addAttribute("listaProdutos",listaProdutos);
-
         model.addAttribute("termo", termo);
+        model.addAttribute("usuarioLogado", SessaoUtil.obterSessao(session));
 
         return "produtos/produtolista";
     }
@@ -50,6 +50,7 @@ public class ProdutoPageController {
         }
 
         model.addAttribute("produtoDto", new ProdutoDto(null, null, null, null, null));
+        model.addAttribute("usuarioLogado", SessaoUtil.obterSessao(session));
 
         return "produtos/produtocadastrar";
     }
@@ -64,7 +65,18 @@ public class ProdutoPageController {
 
         ProdutoEntity produto = service.buscarProdutoPorId(id);
 
-        model.addAttribute("produtoAtualizacao",produto);
+        // Criar DTO de atualização a partir da entidade
+        ProdutoAtualizarDto produtoAtualizarDto = new ProdutoAtualizarDto(
+            produto.getId(),
+            produto.getCodigo(),
+            produto.getNome(),
+            produto.getCaracteristicas(),
+            produto.getEstoqueAtual(),
+            produto.getEstoqueMinimo()
+        );
+
+        model.addAttribute("produtoAtualizacao", produtoAtualizarDto);
+        model.addAttribute("usuarioLogado", SessaoUtil.obterSessao(session));
 
         return "produtos/produtoatualizar";
     }
