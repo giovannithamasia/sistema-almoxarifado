@@ -3,71 +3,113 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editar Produto</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/estilo.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <title>Editar Produto - FerraSul</title>
+
+    <!-- Fontes Google: Inter, Outfit, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- CSS customizado -->
+    <link rel="stylesheet" th:href="@{/css/produtos.css}">
 </head>
-<body class="bg-light">
+<body>
 
-<div th:replace="~{/navbar :: navbar}"></div>
+<div class="dashboard-container">
 
-<main class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-8">
-
-            <div class="card shadow-sm">
-                <div class="card-header py-3">
-                    <h6 class="m-0 fw-bold">Editar Produto</h6>
-                </div>
-                <div class="card-body">
-
-                    <form th:action="@{/produtoatualizar/{id}(id=${produtoAtualizacao.id})}" th:object="${produtoAtualizacao}" method="post" novalidate>
-
-                        <input type="hidden" th:field="*{id}">
-
-                        <div class="mb-3">
-                            <label for="codigo" class="form-label">Código do Produto</label>
-                            <input type="text" class="form-control bg-light" id="codigo" th:field="*{codigo}" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome</label>
-                            <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
-                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="caracteristicas" class="form-label">Características</label>
-                            <input type="text" class="form-control" id="caracteristicas" th:field="*{caracteristicas}" required>
-                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('caracteristicas')}" th:errors="*{caracteristicas}"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="estoqueAtual" class="form-label">Estoque Atual</label>
-                                <input type="number" class="form-control" id="estoqueAtual" th:field="*{estoqueAtual}" required>
-                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('estoqueAtual')}" th:errors="*{estoqueAtual}"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="estoqueMinimo" class="form-label">Estoque Mínimo</label>
-                                <input type="number" class="form-control" id="estoqueMinimo" th:field="*{estoqueMinimo}" required>
-                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('estoqueMinimo')}" th:errors="*{estoqueMinimo}"></div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end gap-2 mt-4">
-                            <a class="btn btn-outline-secondary" th:href="@{/produtolista}">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+  <header class="dashboard-header">
+    <div class="brand">
+      <div class="logo-hexagon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 0L31.5 8V24L16 32L0.5 24V8L16 0Z" fill="#f59e0b"/>
+          <path d="M16 8L22 11V21L16 24L10 21V11L16 8Z" fill="white"/>
+        </svg>
+      </div>
+      <span class="brand-name">FerraSul</span>
     </div>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <nav class="main-nav">
+      <a href="/home" class="nav-link">Início</a>
+      <a href="/produtolista" class="nav-link active">Produtos</a>
+      <a href="/movimentacoes" class="nav-link">Estoque</a>
+    </nav>
+
+    <div class="user-area">
+      <span class="user-label" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Administrador'}">Administrador</span>
+      <a href="/logout" class="logout-btn" title="Sair">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <p class="content-eyebrow">EDIÇÃO</p>
+    <h1 class="content-title">Editar Produto</h1>
+
+    <div class="form-container">
+      <form th:action="@{/produtoatualizar/{id}(id=${produtoAtualizacao.id})}" th:object="${produtoAtualizacao}" method="post" novalidate>
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="form-group">
+          <label for="codigo" class="field-label">CÓDIGO DO PRODUTO</label>
+          <div class="input-wrapper">
+            <input type="text" class="form-input readonly" id="codigo" th:field="*{codigo}" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nome" class="field-label">NOME</label>
+          <div class="input-wrapper">
+            <input type="text" class="form-input" id="nome" th:field="*{nome}" required>
+          </div>
+          <div class="error-message" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="caracteristicas" class="field-label">CARACTERÍSTICAS</label>
+          <div class="input-wrapper">
+            <input type="text" class="form-input" id="caracteristicas" th:field="*{caracteristicas}" required>
+          </div>
+          <div class="error-message" th:if="${#fields.hasErrors('caracteristicas')}" th:errors="*{caracteristicas}"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="estoqueAtual" class="field-label">ESTOQUE ATUAL</label>
+            <div class="input-wrapper">
+              <input type="number" class="form-input" id="estoqueAtual" th:field="*{estoqueAtual}" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="estoqueMinimo" class="field-label">ESTOQUE MÍNIMO</label>
+            <div class="input-wrapper">
+              <input type="number" class="form-input" id="estoqueMinimo" th:field="*{estoqueMinimo}" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a th:href="@{/produtolista}" class="btn-secondary">Cancelar</a>
+          <button type="submit" class="btn-primary">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+</div>
+
+<!-- JavaScript -->
+<script>
+  lucide.createIcons();
+</script>
 </body>
 </html>

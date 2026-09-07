@@ -1,15 +1,5 @@
-/*
- * CSS Customizado - Tela de Login
- * Design baseado na especificação Figma (sem Bootstrap)
- *
- * Cores principais:
- * - Background: #0b0d11
- * - Primary (botão, logo): #f59e0b
- * - Texto principal: #e8eaf0
- * - Texto secundário: #6b7591
- * - Borda input: #1e2432
- * - Erro: #f87171
- */
+/* CSS Customizado - Tela de Login */
+/* Design baseado na especificação Figma (sem Bootstrap) */
 
 * {
     margin: 0;
@@ -30,8 +20,6 @@ body {
     justify-content: center;
     min-height: 100vh;
     background-color: #0b0d11;
-
-    /* Grid decorativo: linhas horizontais e verticais com 40px de espaçamento */
     background-image:
         linear-gradient(rgba(26, 32, 53, 0.25) 1px, transparent 1px),
         linear-gradient(90deg, rgba(26, 32, 53, 0.25) 1px, transparent 1px);
@@ -96,7 +84,7 @@ body {
     color: #e8eaf0;
 }
 
-/* FE-01/FE-02: Mensagem de erro */
+/* Mensagem de erro */
 .error-message {
     display: flex;
     align-items: center;
@@ -156,7 +144,7 @@ body {
     border-color: #f59e0b;
 }
 
-/* FE-02: Estado de erro em campos vazios */
+/* Estado de erro em campos vazios */
 .form-input.error {
     border-color: #f87171;
 }
@@ -167,7 +155,7 @@ body {
 }
 
 .form-input.password-input {
-    padding-right: 44px; /* Espaço para o botão toggle */
+    padding-right: 44px;
 }
 
 /* Botão toggle de mostrar/ocultar senha */

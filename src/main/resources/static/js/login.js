@@ -1,10 +1,5 @@
-/**
- * JavaScript - Tela de Login
- * Validações front-end e interações
- * 
- * FE-02: Validação de campos vazios antes do submit
- * Toggle: Mostrar/ocultar senha
- */
+/* JavaScript - Tela de Login */
+/* Validações front-end e interações */
 
 document.addEventListener('DOMContentLoaded', function() {
     const togglePassword = document.getElementById('togglePassword');
@@ -17,24 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePassword.addEventListener('click', function() {
         const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
         senhaInput.setAttribute('type', type);
-
-        // Atualiza cor do ícone (CSS: .active muda fill para #f59e0b)
         togglePassword.classList.toggle('active');
-
-        // Atualiza title para acessibilidade
         const title = type === 'password' ? 'Mostrar senha' : 'Ocultar senha';
         togglePassword.setAttribute('title', title);
     });
 
-    // FE-02: Validação de campos vazios antes do submit
+    // Validação de campos vazios antes do submit
     loginForm.addEventListener('submit', function(e) {
         let hasError = false;
-
-        // Remove estados de erro anteriores
         loginInput.classList.remove('error');
         senhaInput.classList.remove('error');
 
-        // Verifica se campos estão vazios
         if (!loginInput.value.trim()) {
             loginInput.classList.add('error');
             hasError = true;
@@ -45,11 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
             hasError = true;
         }
 
-        // Se houver erro, impede submit e mostra mensagem
         if (hasError) {
             e.preventDefault();
-
-            // Cria ou atualiza div de erro
             let errorDiv = document.querySelector('.error-message');
             if (!errorDiv) {
                 errorDiv = document.createElement('div');
