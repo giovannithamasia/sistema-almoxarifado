@@ -69,13 +69,16 @@
         <div class="alert alert-warning" th:if="${alertaMinimo}" th:text="${alertaMinimo}">Produto abaixo do estoque mínimo!</div>
         <div class="alert alert-success" th:if="${mensagemSucesso}" th:text="${mensagemSucesso}">Movimentação registrada com sucesso.</div>
 
+        <!-- Alerta de Erro Geral Adicionado -->
+        <div class="alert alert-error" th:if="${mensagemErro}" th:text="${mensagemErro}">Ocorreu um erro inesperado.</div>
+
         <!-- Passo 2 e 3: Tabela de Produtos Ordenada -->
         <div class="table-container">
             <table class="data-table">
                 <thead>
                 <tr>
                     <th>Código</th>
-                    <th>Produto (Ordem Alfabética)</th>
+                    <th>Produto </th>
                     <th>Estoque Atual</th>
                     <th>Ação</th>
                 </tr>
@@ -122,7 +125,8 @@
                 <tr th:each="mov : ${listaMovimentacoes}">
                     <td th:text="${mov.produto.nome}">Alicate</td>
                     <td>
-                        <span th:text="${mov.tipo}" th:style="${mov.tipo == 'ENTRADA' ? 'color: green; font-weight: bold;' : 'color: red; font-weight: bold;'}">ENTRADA</span>
+                        <!-- CORRIGIDO: Alterado de 'mov.tipo' para 'mov.tipoMovimentacao' -->
+                        <span th:text="${mov.tipoMovimentacao}" th:style="${mov.tipoMovimentacao.name() == 'ENTRADA' ? 'color: green; font-weight: bold;' : 'color: red; font-weight: bold;'}">ENTRADA</span>
                     </td>
                     <td th:text="${mov.quantidade}">10</td>
                     <td th:text="${mov.usuario.nome}">João Silva</td>
@@ -174,7 +178,6 @@
 
             <div class="form-group">
                 <label for="dataMovimentacaoModal">Data da Movimentação</label>
-                <!-- No Controller, a data pode ser pegue automaticamente se vier nula, ou forçada aqui -->
                 <input type="datetime-local" name="dataMovimentacao" id="dataMovimentacaoModal" required>
             </div>
 
@@ -186,41 +189,32 @@
 <script>
     lucide.createIcons();
 
-    // Lógica para abrir e fechar o Modal e popular os dados do produto selecionado
     const modal = document.getElementById('modalMovimentacao');
     const botoesMovimentar = document.querySelectorAll('.btn-movimentar');
     const btnFechar = document.getElementById('btnFecharModal');
 
-    // Inputs do Modal
     const inputProdutoId = document.getElementById('produtoIdModal');
     const inputProdutoNome = document.getElementById('produtoNomeModal');
     const inputDataAtual = document.getElementById('dataMovimentacaoModal');
 
-    // Ao clicar em movimentar na linha da tabela
     botoesMovimentar.forEach(botao => {
         botao.addEventListener('click', function() {
-            // Pega os dados do produto pelo atributo data-* do botão
             const prodId = this.getAttribute('data-id');
             const prodNome = this.getAttribute('data-nome');
 
-            // Preenche o formulário
             inputProdutoId.value = prodId;
             inputProdutoNome.value = prodNome;
 
-            // Preenche a data atual por padrão para facilitar
             const agora = new Date();
             agora.setMinutes(agora.getMinutes() - agora.getTimezoneOffset());
             inputDataAtual.value = agora.toISOString().slice(0,16);
 
-            // Abre o modal
             modal.classList.add('active');
         });
     });
 
-    // Fechar Modal
     btnFechar.addEventListener('click', () => modal.classList.remove('active'));
 
-    // Fecha clicando fora do conteúdo
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.classList.remove('active');
