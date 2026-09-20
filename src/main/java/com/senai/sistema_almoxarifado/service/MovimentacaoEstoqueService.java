@@ -1,6 +1,6 @@
 package com.senai.sistema_almoxarifado.service;
 
-import com.senai.sistema_almoxarifado.dto.MovimentacaoDto.MovimentacaoRequisicaoDto;
+import com.senai.sistema_almoxarifado.dto.movimentacao.MovimentacaoEstoqueDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoRespostaDto;
 import com.senai.sistema_almoxarifado.entity.MovimentacaoEstoqueEntity;
 import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
@@ -33,64 +33,38 @@ public class MovimentacaoEstoqueService {
     }
 
     @Transactional
-    public String registrarEntrada(MovimentacaoRequisicaoDto dto, UsuarioEntity usuarioLogado) {
-        if (dto.idProduto() == null || dto.quantidade() == null || dto.dataMovimentacao() == null) {
-            throw new IllegalArgumentException("Campos obrigatórios (Produto, Quantidade e Data) não preenchidos.");
-        }
-        if (dto.quantidade() <= 0) {
-            throw new IllegalArgumentException("A quantidade de entrada deve ser maior que zero.");
-        }
-
-        ProdutoEntity produto = produtoRepository.findById(dto.idProduto())
+    public void registrarEntrada(MovimentacaoEstoqueDto dto, UsuarioEntity usuarioLogado) {
+        ProdutoEntity produto = produtoRepository.findById(dto.produtoId())
                 .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado no sistema."));
 
         produto.setEstoqueAtual(produto.getEstoqueAtual() + dto.quantidade());
         produtoRepository.save(produto);
 
-        MovimentacaoEstoqueEntity movimentacao = new MovimentacaoEstoqueEntity();
-        movimentacao.setProduto(produto);
-        movimentacao.setUsuario(usuarioLogado);
-        movimentacao.setTipoMovimentacao(TipoMovimentacaoEstoque.ENTRADA);
-        movimentacao.setQuantidade(dto.quantidade());
-        movimentacao.setDataMovimentacao(dto.dataMovimentacao());
-        movimentacaoEstoqueRepository.save(movimentacao);
-
-        return "Movimentação de entrada registrada com sucesso!";
+        movimentacaoEstoqueRepository.save(dto.toMovimentacao(produto,usuarioLogado,
+                TipoMovimentacaoEstoque.ENTRADA));
     }
 
     @Transactional
-    public String registrarSaida(MovimentacaoRequisicaoDto dto, UsuarioEntity usuarioLogado) {
-        if (dto.idProduto() == null || dto.quantidade() == null || dto.dataMovimentacao() == null) {
-            throw new IllegalArgumentException("Campos obrigatórios (Produto, Quantidade e Data) não preenchidos.");
-        }
-        if (dto.quantidade() <= 0) {
-            throw new IllegalArgumentException("A quantidade de saída deve ser maior que zero.");
-        }
-
-        ProdutoEntity produto = produtoRepository.findById(dto.idProduto())
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado no sistema."));
+    public void registrarSaida(MovimentacaoEstoqueDto dto, UsuarioEntity usuarioLogado) {
+        ProdutoEntity produto = produtoRepository.findById(dto.produtoId())
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado no sistema"));
 
         if (dto.quantidade() > produto.getEstoqueAtual()) {
-            throw new IllegalArgumentException("Quantidade insuficiente em estoque.");
+            throw new IllegalArgumentException("Quantidade insuficiente em estoque");
         }
 
         produto.setEstoqueAtual(produto.getEstoqueAtual() - dto.quantidade());
         produtoRepository.save(produto);
 
-        MovimentacaoEstoqueEntity movimentacao = new MovimentacaoEstoqueEntity();
-        movimentacao.setProduto(produto);
-        movimentacao.setUsuario(usuarioLogado);
-        movimentacao.setTipoMovimentacao(TipoMovimentacaoEstoque.SAIDA);
-        movimentacao.setQuantidade(dto.quantidade());
-        movimentacao.setDataMovimentacao(dto.dataMovimentacao());
-        movimentacaoEstoqueRepository.save(movimentacao);
+        movimentacaoEstoqueRepository.save(dto.toMovimentacao(produto,usuarioLogado,
+                TipoMovimentacaoEstoque.SAIDA));
+    }
 
-        int estoqueMin = produto.getEstoqueMinimo() != null ? produto.getEstoqueMinimo() : 0;
-        if (produto.getEstoqueAtual() < estoqueMin) {
-            return "Movimentação registrada com sucesso! ATENÇÃO: O produto " + produto.getNome() + " ficou abaixo do estoque mínimo.";
-        }
+    public boolean verificarAlertaEstoqueMinimo(Long produtoId) {
+        ProdutoEntity produto = produtoRepository.findById(produtoId)
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
 
-        return "Movimentação de saída registrada com sucesso!";
+        return produto.getEstoqueAtual() < produto.getEstoqueMinimo();
     }
 }
 
