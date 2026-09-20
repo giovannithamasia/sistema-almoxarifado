@@ -12,23 +12,26 @@
     <link rel="stylesheet" th:href="@{/css/produtos.css}">
 
     <style>
-        /* Estilos do Modal de Movimentação */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        /* Estilos do Modal de Movimentação - Dark Mode */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background-color: #fff; padding: 24px; border-radius: 8px; width: 100%; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .modal-content { background-color: #12151c; padding: 24px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid #1e2432; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-header h3 { margin: 0; font-family: 'Outfit', sans-serif; color: #0f172a; }
-        .close-modal { background: none; border: none; cursor: pointer; color: #64748b; }
+        .modal-header h3 { margin: 0; font-family: 'Outfit', sans-serif; color: #e8eaf0; font-size: 18px; font-weight: 700; }
+        .close-modal { background: none; border: none; cursor: pointer; color: #6b7591; padding: 4px; border-radius: 4px; transition: color 0.15s, background-color 0.15s; }
+        .close-modal:hover { color: #f59e0b; background-color: rgba(245, 158, 11, 0.1); }
 
-        /* Estilos do Formulário */
+        /* Estilos do Formulário - Dark Mode */
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-        .form-group label { font-size: 0.875rem; font-weight: 500; color: #475569; }
-        .form-group select, .form-group input { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: 'Inter', sans-serif; }
-        .form-group input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+        .form-group label { font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: #6b7591; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+        .form-group select, .form-group input { padding: 12px 14px; border: 1px solid #1e2432; border-radius: 3px; font-family: 'Inter', sans-serif; background-color: #0b0d11; color: #e8eaf0; font-size: 14px; outline: none; transition: border-color 0.15s; }
+        .form-group select:focus, .form-group input:focus { border-color: #f59e0b; }
+        .form-group input[readonly] { background-color: #161a26; color: #6b7591; cursor: not-allowed; }
+        .form-group select option { background-color: #12151c; color: #e8eaf0; }
 
-        /* Divisores de seção */
-        .section-divider { margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-end; }
-        .section-divider h2 { margin: 0; font-size: 1.25rem; color: #0f172a; font-family: 'Outfit', sans-serif; }
+        /* Divisores de seção - Dark Mode */
+        .section-divider { margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 1px solid #1e2432; display: flex; justify-content: space-between; align-items: flex-end; }
+        .section-divider h2 { margin: 0; font-size: 20px; color: #e8eaf0; font-family: 'Outfit', sans-serif; font-weight: 700; }
     </style>
 </head>
 <body>
