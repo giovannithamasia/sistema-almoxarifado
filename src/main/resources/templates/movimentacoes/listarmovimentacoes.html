@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestão de Estoque - FerraSul</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" th:href="@{/css/produtos.css}">
+
+    <style>
+        /* Estilos do Modal de Movimentação - Dark Mode */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background-color: #12151c; padding: 24px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid #1e2432; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { margin: 0; font-family: 'Outfit', sans-serif; color: #e8eaf0; font-size: 18px; font-weight: 700; }
+        .close-modal { background: none; border: none; cursor: pointer; color: #6b7591; padding: 4px; border-radius: 4px; transition: color 0.15s, background-color 0.15s; }
+        .close-modal:hover { color: #f59e0b; background-color: rgba(245, 158, 11, 0.1); }
+
+        /* Estilos do Formulário - Dark Mode */
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .form-group label { font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: #6b7591; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+        .form-group select, .form-group input { padding: 12px 14px; border: 1px solid #1e2432; border-radius: 3px; font-family: 'Inter', sans-serif; background-color: #0b0d11; color: #e8eaf0; font-size: 14px; outline: none; transition: border-color 0.15s; }
+        .form-group select:focus, .form-group input:focus { border-color: #f59e0b; }
+        .form-group input[readonly] { background-color: #161a26; color: #6b7591; cursor: not-allowed; }
+        .form-group select option { background-color: #12151c; color: #e8eaf0; }
+
+        /* Divisores de seção - Dark Mode */
+        .section-divider { margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 1px solid #1e2432; display: flex; justify-content: space-between; align-items: flex-end; }
+        .section-divider h2 { margin: 0; font-size: 20px; color: #e8eaf0; font-family: 'Outfit', sans-serif; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <header class="dashboard-header">
+        <div class="brand">
+            <a th:href="@{/home}" class="brand-link">
+                <div class="logo-hexagon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 0L31.5 8V24L16 32L0.5 24V8L16 0Z" fill="#f59e0b"/>
+                        <path d="M16 8L22 11V21L16 24L10 21V11L16 8Z" fill="white"/>
+                    </svg>
+                </div>
+                <span class="brand-name">FerraSul</span>
+            </a>
+        </div>
+
+        <nav class="main-nav">
+            <a th:href="@{/home}" class="nav-link">Início</a>
+            <a th:href="@{/produtolista}" class="nav-link">Produtos</a>
+            <a th:href="@{/movimentacoes}" class="nav-link active">Estoque</a>
+        </nav>
+
+        <div class="user-area">
+            <div class="user-dropdown">
+                <button class="user-toggle" id="userToggle">
+                    <span class="user-avatar" th:text="${usuarioLogado != null ? #strings.substring(usuarioLogado.usuarioNome(), 0, 1).toUpperCase() : 'A'}">A</span>
+                    <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" id="userDropdown">
+                    <div class="dropdown-header">
+                        <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Administrador'}">Administrador</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a th:href="@{/logout}" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <p class="content-eyebrow">GESTÃO DE ESTOQUE</p>
+        <h1 class="content-title">Registrar Movimentação</h1>
+
+        <!-- Alertas de RN-004 e Erros (RF-007) -->
+        <div class="alert alert-error" th:if="${erroQuantidade}" th:text="${erroQuantidade}">Quantidade insuficiente em estoque</div>
+        <div class="alert alert-warning" th:if="${alertaMinimo}" th:text="${alertaMinimo}">Produto abaixo do estoque mínimo!</div>
+        <div class="alert alert-success" th:if="${mensagemSucesso}" th:text="${mensagemSucesso}">Movimentação registrada com sucesso.</div>
+
+        <!-- Alerta de Erro Geral Adicionado -->
+        <div class="alert alert-error" th:if="${mensagemErro}" th:text="${mensagemErro}">Ocorreu um erro inesperado.</div>
+
+        <!-- Passo 2 e 3: Tabela de Produtos Ordenada -->
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Produto </th>
+                    <th>Estoque Atual</th>
+                    <th>Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- RF-007: Sistema lista os produtos cadastrados em ordem alfabética -->
+                <tr th:each="prod : ${listaProdutos}">
+                    <td th:text="${prod.codigo}">FRM-001</td>
+                    <td th:text="${prod.nome}">Alicate</td>
+                    <td th:text="${prod.estoqueAtual}">15</td>
+                    <td>
+                        <!-- Passo 3: Usuário seleciona o produto clicando no botão -->
+                        <button class="btn-primary btn-movimentar" style="padding: 6px 12px; font-size: 0.875rem;"
+                                th:data-id="${prod.id}" th:data-nome="${prod.nome}">
+                            Movimentar
+                        </button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(listaProdutos)}">
+                    <td colspan="4" class="empty-state">Nenhum produto cadastrado para movimentar.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- RF-008: Consultar Histórico -->
+        <div class="section-divider">
+            <h2>Histórico de Movimentações</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Responsável</th>
+                    <th>Data</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- O Controller deve enviar a lista ordenada da mais recente para a mais antiga -->
+                <tr th:each="mov : ${listaMovimentacoes}">
+                    <td th:text="${mov.produto.nome}">Alicate</td>
+                    <td>
+                        <!-- CORRIGIDO: Alterado de 'mov.tipo' para 'mov.tipoMovimentacao' -->
+                        <span th:text="${mov.tipoMovimentacao}" th:style="${mov.tipoMovimentacao.name() == 'ENTRADA' ? 'color: green; font-weight: bold;' : 'color: red; font-weight: bold;'}">ENTRADA</span>
+                    </td>
+                    <td th:text="${mov.quantidade}">10</td>
+                    <td th:text="${mov.usuario.nome}">João Silva</td>
+                    <td th:text="${#temporals.format(mov.dataMovimentacao, 'dd/MM/yyyy HH:mm')}">03/08/2026 14:30</td>
+                </tr>
+
+                <!-- FE-01 do RF-008 -->
+                <tr th:if="${#lists.isEmpty(listaMovimentacoes)}">
+                    <td colspan="5" class="empty-state">Ainda não há movimentações registradas</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</div>
+
+<!-- Modal do Formulário de Movimentação (Passos 4 a 7 do RF-007) -->
+<div id="modalMovimentacao" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Registrar Movimentação</h3>
+            <button class="close-modal" id="btnFecharModal"><i data-lucide="x"></i></button>
+        </div>
+
+        <form th:action="@{/movimentacaocadastrar}" method="post">
+            <!-- ID oculto do produto selecionado -->
+            <input type="hidden" name="produtoId" id="produtoIdModal" required>
+
+            <div class="form-group">
+                <label>Produto Selecionado</label>
+                <!-- Apenas visualização para o usuário saber o que escolheu -->
+                <input type="text" id="produtoNomeModal" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoModal">Tipo de Movimentação</label>
+                <select name="tipo" id="tipoModal" required>
+                    <option value="">Selecione...</option>
+                    <option value="ENTRADA">Entrada</option>
+                    <option value="SAIDA">Saída</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantidadeModal">Quantidade</label>
+                <input type="number" name="quantidade" id="quantidadeModal" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dataMovimentacaoModal">Data da Movimentação</label>
+                <input type="datetime-local" name="dataMovimentacao" id="dataMovimentacaoModal" required>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Confirmar Registro</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    // Dropdown do usuário
+    const userToggle = document.getElementById('userToggle');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userToggle && userDropdown) {
+        userToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', function() {
+            userDropdown.style.display = 'none';
+        });
+
+        // Prevenir fechamento ao clicar dentro do dropdown
+        userDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    const modal = document.getElementById('modalMovimentacao');
+    const botoesMovimentar = document.querySelectorAll('.btn-movimentar');
+    const btnFechar = document.getElementById('btnFecharModal');
+
+    const inputProdutoId = document.getElementById('produtoIdModal');
+    const inputProdutoNome = document.getElementById('produtoNomeModal');
+    const inputDataAtual = document.getElementById('dataMovimentacaoModal');
+
+    botoesMovimentar.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const prodId = this.getAttribute('data-id');
+            const prodNome = this.getAttribute('data-nome');
+
+            inputProdutoId.value = prodId;
+            inputProdutoNome.value = prodNome;
+
+            const agora = new Date();
+            agora.setMinutes(agora.getMinutes() - agora.getTimezoneOffset());
+            inputDataAtual.value = agora.toISOString().slice(0,16);
+
+            modal.classList.add('active');
+        });
+    });
+
+    btnFechar.addEventListener('click', () => modal.classList.remove('active'));
+
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+</script>
+</body>
+</html>
