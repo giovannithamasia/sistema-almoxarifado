@@ -37,26 +37,46 @@
 
     <header class="dashboard-header">
         <div class="brand">
-            <div class="logo-hexagon">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 0L31.5 8V24L16 32L0.5 24V8L16 0Z" fill="#f59e0b"/>
-                    <path d="M16 8L22 11V21L16 24L10 21V11L16 8Z" fill="white"/>
-                </svg>
-            </div>
-            <span class="brand-name">FerraSul</span>
+            <a th:href="@{/home}" class="brand-link">
+                <div class="logo-hexagon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 0L31.5 8V24L16 32L0.5 24V8L16 0Z" fill="#f59e0b"/>
+                        <path d="M16 8L22 11V21L16 24L10 21V11L16 8Z" fill="white"/>
+                    </svg>
+                </div>
+                <span class="brand-name">FerraSul</span>
+            </a>
         </div>
 
         <nav class="main-nav">
-            <a href="/home" class="nav-link">Início</a>
-            <a href="/produtolista" class="nav-link">Produtos</a>
-            <a href="/movimentacoes" class="nav-link active">Estoque</a>
+            <a th:href="@{/home}" class="nav-link">Início</a>
+            <a th:href="@{/produtolista}" class="nav-link">Produtos</a>
+            <a th:href="@{/movimentacoes}" class="nav-link active">Estoque</a>
         </nav>
 
         <div class="user-area">
-            <span class="user-label" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Administrador'}">Administrador</span>
-            <a href="/logout" class="logout-btn" title="Sair">
-                <i data-lucide="log-out"></i>
-            </a>
+            <div class="user-dropdown">
+                <button class="user-toggle" id="userToggle">
+                    <span class="user-avatar" th:text="${usuarioLogado != null ? #strings.substring(usuarioLogado.usuarioNome(), 0, 1).toUpperCase() : 'A'}">A</span>
+                    <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" id="userDropdown">
+                    <div class="dropdown-header">
+                        <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Administrador'}">Administrador</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a th:href="@{/logout}" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Sair
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -188,6 +208,27 @@
 
 <script>
     lucide.createIcons();
+
+    // Dropdown do usuário
+    const userToggle = document.getElementById('userToggle');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userToggle && userDropdown) {
+        userToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', function() {
+            userDropdown.style.display = 'none';
+        });
+
+        // Prevenir fechamento ao clicar dentro do dropdown
+        userDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
 
     const modal = document.getElementById('modalMovimentacao');
     const botoesMovimentar = document.querySelectorAll('.btn-movimentar');

@@ -75,6 +75,18 @@ body {
     letter-spacing: -0.01em;
 }
 
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+
+.brand-link:hover {
+    opacity: 0.8;
+}
+
 .main-nav {
     display: flex;
     align-items: center;
@@ -107,32 +119,99 @@ body {
     gap: 10px;
 }
 
-.user-label {
+.user-dropdown {
+    position: relative;
+}
+
+.user-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background-color 0.15s;
+}
+
+.user-toggle:hover {
+    background-color: var(--bg-base);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent);
+    color: var(--bg-base);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+}
+
+.dropdown-arrow {
+    color: var(--text-secondary);
+    transition: transform 0.15s;
+}
+
+.user-toggle:hover .dropdown-arrow {
+    color: var(--accent);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.dropdown-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-name {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 500;
     color: var(--text-primary);
 }
 
-.logout-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    padding: 0;
-    transition: color 0.15s;
-    text-decoration: none;
+.dropdown-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 0;
 }
 
-.logout-btn:hover {
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-base);
     color: var(--accent);
 }
 
-.logout-btn svg {
-    width: 18px;
-    height: 18px;
+.dropdown-item svg {
     stroke: currentColor;
     fill: none;
 }
