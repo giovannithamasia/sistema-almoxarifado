@@ -5,7 +5,9 @@ import com.senai.sistema_almoxarifado.dto.produto.ProdutoDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoRespostaDto;
 import com.senai.sistema_almoxarifado.entity.ProdutoEntity;
 import com.senai.sistema_almoxarifado.exceptions.ProdutoCadastradoException;
+import com.senai.sistema_almoxarifado.exceptions.ProdutoComMovimentacaoException;
 import com.senai.sistema_almoxarifado.exceptions.ProdutoNaoEncontradoException;
+import com.senai.sistema_almoxarifado.repository.MovimentacaoEstoqueRepository;
 import com.senai.sistema_almoxarifado.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProdutoService {
 
     private final ProdutoRepository repository;
+    private final MovimentacaoEstoqueRepository movimentacaoRepository;
 
     public List<ProdutoRespostaDto> listarProdutos(){
         return repository.findAll()
@@ -61,6 +64,9 @@ public class ProdutoService {
     public void excluirProduto(Long id){
         buscarProdutoPorId(id);
 
+        if (movimentacaoRepository.existsByProdutoId(id)) {
+            throw new ProdutoComMovimentacaoException("Não é possível excluir o produto pois ele possui movimentações registradas");
+        }
         repository.deleteById(id);
     }
 }

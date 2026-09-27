@@ -1,20 +1,16 @@
 <!doctype html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lista de Produtos - FerraSul</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lista de Produtos - FerraSul</title>
 
-    <!-- Fontes Google: Inter, Outfit, JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- CSS customizado -->
-    <link rel="stylesheet" th:href="@{/css/produtos.css}">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" th:href="@{/css/produtos.css}">
 </head>
 <body>
 
@@ -69,12 +65,12 @@
     <p class="content-eyebrow">GERENCIAMENTO</p>
     <h1 class="content-title">Produtos em Estoque</h1>
 
-    <!-- Alertas de Sucesso/Erro -->
+    <div id="mensagem-erro" class="alert alert-error" style="display: none; margin-bottom: 20px;"></div>
+
     <div class="alert alert-success" th:if="${mensagemCriacao}" th:text="${mensagemCriacao}"></div>
     <div class="alert alert-success" th:if="${mensagemAtualizacao}" th:text="${mensagemAtualizacao}"></div>
     <div class="alert alert-error" th:if="${erroNotFound}" th:text="${erroNotFound}"></div>
 
-    <!-- Barra de ações e pesquisa -->
     <div class="actions-bar">
       <form th:action="@{/produtolista}" method="get" class="search-form">
         <div class="search-wrapper">
@@ -95,52 +91,50 @@
       </a>
     </div>
 
-    <!-- Tabela de produtos -->
     <div class="table-container">
       <table class="data-table">
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Características</th>
-            <th>Estoque Atual</th>
-            <th>Estoque Mínimo</th>
-            <th>Ações</th>
-          </tr>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Características</th>
+          <th>Estoque Atual</th>
+          <th>Estoque Mínimo</th>
+          <th>Ações</th>
+        </tr>
         </thead>
         <tbody>
-          <tr th:each="produto : ${listaProdutos}">
-            <td th:text="${produto.id}">1</td>
-            <td th:text="${produto.codigo}">FRM-001</td>
-            <td th:text="${produto.nome}">Martelo</td>
-            <td th:text="${produto.caracteristicas}">Cabo de madeira</td>
-            <td th:text="${produto.estoqueAtual}">50</td>
-            <td th:text="${produto.estoqueMinimo}">10</td>
-            <td>
-              <div class="action-buttons">
-                <a th:href="@{/produtoatualizar/{id}(id=${produto.id})}" class="btn-icon" title="Editar">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89783 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-                <button th:data-id="${produto.id}" class="btn-icon excluir" title="Excluir">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 6H5H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M10 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M14 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-            </td>
-          </tr>
+        <tr th:each="produto : ${listaProdutos}">
+          <td th:text="${produto.id}">1</td>
+          <td th:text="${produto.codigo}">FRM-001</td>
+          <td th:text="${produto.nome}">Martelo</td>
+          <td th:text="${produto.caracteristicas}">Cabo de madeira</td>
+          <td th:text="${produto.estoqueAtual}">50</td>
+          <td th:text="${produto.estoqueMinimo}">10</td>
+          <td>
+            <div class="action-buttons">
+              <a th:href="@{/produtoatualizar/{id}(id=${produto.id})}" class="btn-icon" title="Editar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89783 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <button th:data-id="${produto.id}" th:data-nome="${produto.nome}" class="btn-icon excluir" title="Excluir">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 6H5H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
 
-          <!-- Mensagem caso a lista esteja vazia -->
-          <tr th:if="${#lists.isEmpty(listaProdutos)}">
-            <td colspan="7" class="empty-state">Nenhum produto encontrado.</td>
-          </tr>
+        <tr th:if="${#lists.isEmpty(listaProdutos)}">
+          <td colspan="7" class="empty-state">Nenhum produto encontrado.</td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -148,12 +142,10 @@
 
 </div>
 
-<!-- JavaScript -->
-<script src="/js/excluir_produto.js"></script>
+<script src="/js/excluir_produto.js?v=7"></script>
 <script>
   lucide.createIcons();
 
-  // Dropdown do usuário
   const userToggle = document.getElementById('userToggle');
   const userDropdown = document.getElementById('userDropdown');
 
@@ -163,12 +155,10 @@
       userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
     });
 
-    // Fechar dropdown ao clicar fora
     document.addEventListener('click', function() {
       userDropdown.style.display = 'none';
     });
 
-    // Prevenir fechamento ao clicar dentro do dropdown
     userDropdown.addEventListener('click', function(e) {
       e.stopPropagation();
     });
