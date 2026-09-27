@@ -16,10 +16,8 @@ public record MovimentacaoEstoqueDto(
 
         @NotNull(message = "A quantidade é obrigatória")
         @Positive(message = "A quantidade deve ser maior que zero")
-        Integer quantidade,
+        Integer quantidade
 
-        @NotNull(message = "A data da movimentação é obrigatória")
-        LocalDateTime dataMovimentacao
 ) {
 
         public MovimentacaoEstoqueEntity toMovimentacao(ProdutoEntity produto, UsuarioEntity usuario, TipoMovimentacaoEstoque tipo) {
@@ -28,7 +26,7 @@ public record MovimentacaoEstoqueDto(
                 movimentacao.setUsuario(usuario);
                 movimentacao.setTipoMovimentacao(tipo);
                 movimentacao.setQuantidade(this.quantidade());
-                movimentacao.setDataMovimentacao(this.dataMovimentacao());
+                movimentacao.setDataMovimentacao(LocalDateTime.now());
                 return movimentacao;
         }
 

@@ -37,6 +37,9 @@ public class MovimentacaoController {
         }
 
         if (bindingResult.hasErrors()) {
+            String mensagemErroValidacao = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            model.addAttribute("mensagemErro", mensagemErroValidacao);
+
             recarregarListasNaTela(model, usuarioSessao);
             return "movimentacoes/listarmovimentacoes";
         }

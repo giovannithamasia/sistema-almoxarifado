@@ -53,7 +53,6 @@ public class ProdutoService {
 
         produto.setNome(produtoAtualizarDto.nome());
         produto.setCaracteristicas(produtoAtualizarDto.caracteristicas());
-        produto.setEstoqueAtual(produtoAtualizarDto.estoqueAtual());
         produto.setEstoqueMinimo(produtoAtualizarDto.estoqueMinimo());
 
         repository.save(produto);

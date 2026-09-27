@@ -25,7 +25,7 @@ public class MovimentacaoPageController {
         model.addAttribute("listaMovimentacoes", service.listarHistoricoMovimentacoes());
         model.addAttribute("usuarioLogado", SessaoUtil.obterSessao(session));
 
-        model.addAttribute("movimentacaoDto", new MovimentacaoEstoqueDto(null, null, null));
+        model.addAttribute("movimentacaoDto", new MovimentacaoEstoqueDto(null, null));
 
         return "movimentacoes/listarmovimentacoes";
     }

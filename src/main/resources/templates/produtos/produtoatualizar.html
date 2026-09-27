@@ -101,15 +101,19 @@
           <div class="form-group">
             <label for="estoqueAtual" class="field-label">ESTOQUE ATUAL</label>
             <div class="input-wrapper">
-              <input type="number" class="form-input" id="estoqueAtual" th:field="*{estoqueAtual}" required>
+              <input type="number" class="form-input readonly" id="estoqueAtual" th:field="*{estoqueAtual}" readonly>
             </div>
+            <small style="color: #6b7591; font-size: 11px; margin-top: 4px;">Alterado apenas via Movimentação.</small>
           </div>
 
+          <!-- Estoque Mínimo Editável com Validação -->
           <div class="form-group">
             <label for="estoqueMinimo" class="field-label">ESTOQUE MÍNIMO</label>
             <div class="input-wrapper">
               <input type="number" class="form-input" id="estoqueMinimo" th:field="*{estoqueMinimo}" required>
             </div>
+            <!-- Div que faz a mensagem de erro aparecer na tela -->
+            <div class="error-message" th:if="${#fields.hasErrors('estoqueMinimo')}" th:errors="*{estoqueMinimo}"></div>
           </div>
         </div>
 

@@ -17,8 +17,6 @@ public record ProdutoAtualizarDto(
         @NotBlank
         String caracteristicas,
 
-        @NotNull
-        @PositiveOrZero
         Integer estoqueAtual,
 
         @NotNull
