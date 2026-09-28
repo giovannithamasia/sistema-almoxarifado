@@ -61,9 +61,9 @@ public class MovimentacaoController {
             } else if ("SAIDA".equalsIgnoreCase(tipo)) {
                 service.registrarSaida(dto, usuarioLogado);
 
-                boolean alerta = service.verificarAlertaEstoqueMinimo(dto.produtoId());
-                if (alerta) {
-                    redirectAttributes.addFlashAttribute("alertaMinimo", "Movimentação registrada com sucesso! ATENÇÃO: O produto ficou abaixo do estoque mínimo.");
+                String mensagemAlerta = service.verificarAlertaEstoqueMinimo(dto.produtoId());
+                if (mensagemAlerta != null) {
+                    redirectAttributes.addFlashAttribute("alertaMinimo", "Movimentação registrada com sucesso! ATENÇÃO: " + mensagemAlerta);
                 } else {
                     redirectAttributes.addFlashAttribute("mensagemSucesso", "Movimentação de saída registrada com sucesso!");
                 }
