@@ -28,14 +28,13 @@ body {
     margin: 0;
 }
 
-/* Container geral */
+/* Container geral - Ocupa 100% do espaço */
 .dashboard-container {
-    max-width: 1200px;
-    margin: 24px auto;
+    width: 100%;
+    min-height: 100vh;
     background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
@@ -43,7 +42,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 32px;
+    padding: 16px 48px;
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
 }
@@ -218,7 +217,8 @@ body {
 
 /* Conteúdo principal */
 .dashboard-content {
-    padding: 32px;
+    padding: 32px 48px;
+    flex: 1;
 }
 
 .content-eyebrow {

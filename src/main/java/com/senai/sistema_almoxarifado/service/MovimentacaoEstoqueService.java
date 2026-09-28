@@ -60,11 +60,15 @@ public class MovimentacaoEstoqueService {
                 TipoMovimentacaoEstoque.SAIDA));
     }
 
-    public boolean verificarAlertaEstoqueMinimo(Long produtoId) {
+    public String verificarAlertaEstoqueMinimo(Long produtoId) {
         ProdutoEntity produto = produtoRepository.findById(produtoId)
                 .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
 
-        return produto.getEstoqueAtual() < produto.getEstoqueMinimo();
+        if (produto.getEstoqueAtual() < produto.getEstoqueMinimo()) {
+            return String.format("O produto '%s' ficou abaixo do estoque mínimo (%d unidades).", 
+                    produto.getNome(), produto.getEstoqueMinimo());
+        }
+        return null;
     }
 }
 
