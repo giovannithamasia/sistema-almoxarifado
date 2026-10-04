@@ -1,37 +1,44 @@
-document.querySelectorAll('.excluir').forEach(function(button) {
-    button.addEventListener('click', function() {
-        const linha = this.closest('tr');
-        const id = this.dataset.id;
-        const nomeProduto = this.dataset.nome;
+// Exclusão de produto (só ADMIN). Envia o token CSRF exigido pelo Spring Security.
+document.addEventListener('DOMContentLoaded', function () {
+  const metaToken = document.querySelector('meta[name="_csrf"]');
+  const metaHeader = document.querySelector('meta[name="_csrf_header"]');
+  const caixaErro = document.getElementById('mensagem-erro');
 
-        if (confirm(`Tem a certeza que deseja excluir o produto ${nomeProduto}?`)) {
+  function mostrarErro(texto) {
+    if (!caixaErro) { alert(texto); return; }
+    caixaErro.textContent = texto;
+    caixaErro.style.display = 'block';
+  }
 
-            const divErro = document.getElementById('mensagem-erro');
-            divErro.style.display = 'none';
+  document.querySelectorAll('.btn-icon.excluir').forEach(function (botao) {
+    botao.addEventListener('click', async function () {
+      const id = botao.dataset.id;
+      const nome = botao.dataset.nome;
 
-            fetch(`/produtoexcluir/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(async response => {
-                if (response.ok) {
-                    linha.remove();
-                    setTimeout(() => location.reload(), 500);
-                } else {
-                    const mensagemErro = await response.text();
+      if (!confirm('Excluir o produto "' + nome + '"?')) return;
 
-                    divErro.textContent = `Não foi possível excluir ${nomeProduto}: ${mensagemErro}`;
-                    divErro.style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            })
-            .catch(error => {
-                divErro.textContent = `Erro de conexão ao tentar excluir ${nomeProduto}.`;
-                divErro.style.display = 'block';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+      const headers = {};
+      if (metaToken && metaHeader) {
+        headers[metaHeader.content] = metaToken.content;
+      }
+
+      try {
+        const resposta = await fetch('/produtoexcluir/' + id, {
+          method: 'DELETE',
+          headers: headers
+        });
+
+        if (resposta.ok) {
+          window.location.reload();
+        } else if (resposta.status === 403) {
+          mostrarErro('Você não tem permissão para excluir produtos.');
+        } else {
+          const texto = await resposta.text();
+          mostrarErro(texto || 'Não foi possível excluir o produto.');
         }
+      } catch (e) {
+        mostrarErro('Erro de conexão ao excluir o produto.');
+      }
     });
+  });
 });

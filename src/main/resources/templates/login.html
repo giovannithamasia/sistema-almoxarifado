@@ -3,11 +3,10 @@
   Tela de Login - Sistema de Controle de Estoque do Almoxarifado
   RF-001: Realizar Login
 
-  Integração Thymeleaf:
-  - th:action="@{/login}": POST para LoginController
-  - th:object="${login}": bind com LoginDto
-  - th:field="*{campo}": mapeamento automático de campos
-  - th:if="${erroLogin}": exibe mensagem de erro do controller
+  Integração Spring Security + Thymeleaf:
+  - th:action="@{/login}": POST tratado pelo Spring Security (inclui o token CSRF automaticamente)
+  - name="username" e name="password": nomes padrão que o Spring Security lê
+  - th:if="${param.error}": aparece quando o login falha (/login?error)
 -->
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -40,29 +39,27 @@
         <h1 class="form-title">ACESSAR PAINEL</h1>
         <p class="form-subtitle">Área restrita ao <span class="highlight">funcionário do almoxarifado</span>.<br>Informe seu usuário e senha cadastrados no sistema.</p>
 
-        <!-- FE-01: Mensagem de erro para credenciais inválidas -->
-        <div class="error-message" th:if="${erroLogin}">
+        <!-- Credenciais inválidas: o Spring redireciona para /login?error -->
+        <div class="error-message" th:if="${param.error}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM7 4H9V9H7V4ZM7 11H9V13H7V11Z" fill="#f87171"/>
             </svg>
-            <span th:text="${erroLogin}">Usuário ou senha inválidos.</span>
+            <span>Usuário ou senha inválidos.</span>
         </div>
 
-        <!-- Formulário de login -->
-        <form th:action="@{/login}" th:object="${login}" method="post" novalidate id="loginForm">
+        <!-- Formulário de login: POST /login é processado pelo Spring Security -->
+        <form th:action="@{/login}" method="post" novalidate id="loginForm">
             <div class="form-group">
                 <label for="login" class="field-label">USUÁRIO</label>
                 <div class="input-wrapper">
-                    <!-- autocomplete="username": padrão para campos de usuário -->
-                    <input type="text" class="form-input" id="login" th:field="*{login}" placeholder="seu usuario" autocomplete="username" required>
+                    <input type="text" class="form-input" id="login" name="username" placeholder="seu usuario" autocomplete="username" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="senha" class="field-label">SENHA</label>
                 <div class="input-wrapper password-wrapper">
-                    <!-- autocomplete="current-password": padrão para campos de senha atual -->
-                    <input type="password" class="form-input" id="senha" th:field="*{senha}" placeholder="••••••••" autocomplete="current-password" required>
+                    <input type="password" class="form-input" id="senha" name="password" placeholder="••••••••" autocomplete="current-password" required>
 
                     <!-- Botão toggle senha: tabindex="-1" não entra no fluxo TAB -->
                     <button type="button" class="toggle-password" id="togglePassword" tabindex="-1" title="Mostrar senha">

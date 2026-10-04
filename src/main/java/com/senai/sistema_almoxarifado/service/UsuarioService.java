@@ -1,20 +1,28 @@
 package com.senai.sistema_almoxarifado.service;
 
-import com.senai.sistema_almoxarifado.dto.LoginDto;
 import com.senai.sistema_almoxarifado.entity.UsuarioEntity;
-import com.senai.sistema_almoxarifado.exceptions.LoginInvalidoException;
 import com.senai.sistema_almoxarifado.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioEntity validarLogin(LoginDto dto) {
-        return usuarioRepository.findByLoginAndSenha(dto.login(),dto.senha())
-                .orElseThrow(() -> new LoginInvalidoException("Login ou senha inválidos."));
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UsuarioEntity usuario = usuarioRepository.findByLogin(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+
+        return new User(
+                usuario.getLogin(),
+                usuario.getSenha(),
+                List.of(new SimpleGrantedAuthority(usuario.getPapel().name()))
+        );
     }
 }

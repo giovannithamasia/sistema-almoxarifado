@@ -4,12 +4,8 @@ import com.senai.sistema_almoxarifado.dto.produto.ProdutoAtualizarDto;
 import com.senai.sistema_almoxarifado.dto.produto.ProdutoDto;
 import com.senai.sistema_almoxarifado.exceptions.ProdutoCadastradoException;
 import com.senai.sistema_almoxarifado.service.ProdutoService;
-import com.senai.sistema_almoxarifado.sessoes.SessaoDto;
-import com.senai.sistema_almoxarifado.sessoes.SessaoUtil;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +26,7 @@ public class ProdutoController {
     public String cadastrarProduto(@Valid @ModelAttribute("produtoDto") ProdutoDto produtoDto,
                                    BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes,
-                                   HttpSession session,
                                    Model model) {
-
-        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
-
-        if (usuarioLogado == null) {
-            return "redirect:/login";
-        }
 
         if (bindingResult.hasErrors()) {
             return "produtos/produtocadastrar";
@@ -58,35 +47,21 @@ public class ProdutoController {
                                    @Valid @ModelAttribute("produtoAtualizacao")
                                    ProdutoAtualizarDto produtoAtualizarDto,
                                    BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes,
-                                   HttpSession session){
-        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
+                                   RedirectAttributes redirectAttributes) {
 
-        if (usuarioLogado == null) {
-            return "redirect:/login";
-        }
-
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "produtos/produtoatualizar";
         }
 
-        produtoService.atualizarProduto(id,produtoAtualizarDto);
+        produtoService.atualizarProduto(id, produtoAtualizarDto);
 
-        redirectAttributes.addFlashAttribute("mensagemAtualizacao","Produto atualizado com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagemAtualizacao", "Produto atualizado com sucesso!");
         return "redirect:/produtolista";
     }
 
     @DeleteMapping("/produtoexcluir/{id}")
-    public ResponseEntity<String> excluir(@PathVariable("id") Long id,
-                                          HttpSession session) {
-        SessaoDto usuarioLogado = SessaoUtil.obterSessao(session);
-
-        if (usuarioLogado == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("faça login");
-        }
-
+    public ResponseEntity<String> excluir(@PathVariable("id") Long id) {
         produtoService.excluirProduto(id);
-
         return ResponseEntity.noContent().build();
     }
 }

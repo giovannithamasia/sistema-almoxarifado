@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lista de Produtos - FerraSul</title>
+  <!-- Token CSRF para o fetch DELETE do excluir_produto.js -->
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,24 +41,29 @@
     <div class="user-area">
       <div class="user-dropdown">
         <button class="user-toggle" id="userToggle">
-          <span class="user-avatar" th:text="${usuarioLogado != null ? #strings.substring(usuarioLogado.usuarioNome(), 0, 1).toUpperCase() : 'A'}">A</span>
+          <!-- usuarioLogado agora é o login (texto), vindo do UsuarioAdvice -->
+          <span class="user-avatar" th:text="${usuarioLogado != null ? #strings.toUpperCase(#strings.substring(usuarioLogado, 0, 1)) : 'A'}">A</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div class="dropdown-menu" id="userDropdown">
           <div class="dropdown-header">
-            <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Administrador'}">Administrador</span>
+            <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado : 'Usuário'}">Usuário</span>
           </div>
           <div class="dropdown-divider"></div>
-          <a th:href="@{/logout}" class="dropdown-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Sair
-          </a>
+
+          <!-- Logout: com Spring Security precisa ser POST (th:action inclui o token CSRF) -->
+          <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Sair
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -82,7 +90,9 @@
         </div>
         <button type="submit" class="btn-primary">Buscar</button>
       </form>
-      <a th:href="@{/produtocadastrar}" class="btn-primary">
+
+      <!-- Só o ADMIN vê o botão de novo produto -->
+      <a th:if="${isAdmin}" th:href="@{/produtocadastrar}" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 5V19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M5 12H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -114,13 +124,15 @@
           <td th:text="${produto.estoqueMinimo}">10</td>
           <td>
             <div class="action-buttons">
+              <!-- Editar: ADMIN e USER -->
               <a th:href="@{/produtoatualizar/{id}(id=${produto.id})}" class="btn-icon" title="Editar">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89783 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </a>
-              <button th:data-id="${produto.id}" th:data-nome="${produto.nome}" class="btn-icon excluir" title="Excluir">
+              <!-- Excluir: só ADMIN -->
+              <button th:if="${isAdmin}" th:data-id="${produto.id}" th:data-nome="${produto.nome}" class="btn-icon excluir" title="Excluir">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 6H5H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -142,10 +154,11 @@
 
 </div>
 
-<script src="/js/excluir_produto.js?v=7"></script>
+<script th:src="@{/js/excluir_produto.js(v=8)}"></script>
 <script>
   lucide.createIcons();
 
+  // Dropdown do usuário
   const userToggle = document.getElementById('userToggle');
   const userDropdown = document.getElementById('userDropdown');
 

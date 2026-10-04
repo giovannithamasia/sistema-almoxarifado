@@ -36,24 +36,30 @@
     <div class="user-area">
       <div class="user-dropdown">
         <button class="user-toggle" id="userToggle">
-          <span class="user-avatar" th:text="${usuarioLogado != null ? #strings.substring(usuarioLogado.usuarioNome(), 0, 1).toUpperCase() : 'A'}">A</span>
+          <!-- usuarioLogado agora é o login (texto), vindo do UsuarioAdvice -->
+          <span class="user-avatar"
+                th:text="${usuarioLogado != null ? #strings.toUpperCase(#strings.substring(usuarioLogado, 0, 1)) : 'A'}">A</span>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div class="dropdown-menu" id="userDropdown">
           <div class="dropdown-header">
-            <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado.usuarioNome() : 'Administrador'}">Administrador</span>
+            <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado : 'Usuário'}">Usuário</span>
           </div>
           <div class="dropdown-divider"></div>
-          <a th:href="@{/logout}" class="dropdown-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Sair
-          </a>
+
+          <!-- Logout: com Spring Security precisa ser POST (o token CSRF vai junto via th:action) -->
+          <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Sair
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -64,7 +70,8 @@
     <h1 class="content-title">O que você precisa fazer?</h1>
 
     <div class="action-grid">
-      <a th:href="@{/produtocadastrar}" class="action-card">
+      <!-- Só o ADMIN vê o cadastro de produto -->
+      <a th:if="${isAdmin}" th:href="@{/produtocadastrar}" class="action-card">
         <div class="action-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

@@ -2,12 +2,12 @@ package com.senai.sistema_almoxarifado.controller.movimentacao;
 
 import com.senai.sistema_almoxarifado.dto.movimentacao.MovimentacaoEstoqueDto;
 import com.senai.sistema_almoxarifado.entity.UsuarioEntity;
+import com.senai.sistema_almoxarifado.repository.UsuarioRepository;
 import com.senai.sistema_almoxarifado.service.MovimentacaoEstoqueService;
-import com.senai.sistema_almoxarifado.sessoes.SessaoDto;
-import com.senai.sistema_almoxarifado.sessoes.SessaoUtil;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,39 +21,36 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MovimentacaoController {
 
     private final MovimentacaoEstoqueService service;
+    private final UsuarioRepository usuarioRepository;
 
     @PostMapping("/movimentacaocadastrar")
     public String registrarMovimentacao(
             @Valid @ModelAttribute("movimentacaoDto") MovimentacaoEstoqueDto dto,
             BindingResult bindingResult,
             @RequestParam(value = "tipo", required = false) String tipo,
-            HttpSession session,
+            @AuthenticationPrincipal UserDetails userDetails,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        SessaoDto usuarioSessao = SessaoUtil.obterSessao(session);
-        if (usuarioSessao == null) {
-            return "redirect:/login";
-        }
 
         if (bindingResult.hasErrors()) {
             String mensagemErroValidacao = bindingResult.getAllErrors().get(0).getDefaultMessage();
             model.addAttribute("mensagemErro", mensagemErroValidacao);
 
-            recarregarListasNaTela(model, usuarioSessao);
+            recarregarListasNaTela(model);
             return "movimentacoes/listarmovimentacoes";
         }
 
         if (tipo == null || tipo.isBlank()) {
             model.addAttribute("mensagemErro", "O tipo de movimentação é obrigatório.");
-            recarregarListasNaTela(model, usuarioSessao);
+            recarregarListasNaTela(model);
             return "movimentacoes/listarmovimentacoes";
         }
 
-        try {
-            UsuarioEntity usuarioLogado = new UsuarioEntity();
-            usuarioLogado.setId(usuarioSessao.usuarioId());
+        // Usuário logado (responsável pela movimentação), vindo do Spring Security
+        UsuarioEntity usuarioLogado = usuarioRepository.findByLogin(userDetails.getUsername())
+                .orElseThrow(() -> new IllegalStateException("Usuário autenticado não encontrado"));
 
+        try {
             if ("ENTRADA".equalsIgnoreCase(tipo)) {
                 service.registrarEntrada(dto, usuarioLogado);
                 redirectAttributes.addFlashAttribute("mensagemSucesso", "Movimentação de entrada registrada com sucesso!");
@@ -69,7 +66,7 @@ public class MovimentacaoController {
                 }
             } else {
                 model.addAttribute("mensagemErro", "Tipo de movimentação inválido.");
-                recarregarListasNaTela(model, usuarioSessao);
+                recarregarListasNaTela(model);
                 return "movimentacoes/listarmovimentacoes";
             }
 
@@ -79,16 +76,16 @@ public class MovimentacaoController {
             } else {
                 model.addAttribute("mensagemErro", e.getMessage());
             }
-            recarregarListasNaTela(model, usuarioSessao);
+            recarregarListasNaTela(model);
             return "movimentacoes/listarmovimentacoes";
         }
 
         return "redirect:/movimentacoes";
     }
 
-    private void recarregarListasNaTela(Model model, SessaoDto usuarioSessao) {
+    // usuarioLogado e isAdmin já são adicionados em todas as telas pelo UsuarioAdvice
+    private void recarregarListasNaTela(Model model) {
         model.addAttribute("listaProdutos", service.listarProdutosCadastrados());
         model.addAttribute("listaMovimentacoes", service.listarHistoricoMovimentacoes());
-        model.addAttribute("usuarioLogado", usuarioSessao);
     }
 }
