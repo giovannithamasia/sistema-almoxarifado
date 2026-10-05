@@ -17,21 +17,21 @@ public class SegurancaConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // Público: arquivos estáticos, login e página de erro
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/error").permitAll()
+                                // Público: arquivos estáticos, login e página de erro
+                                .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/error").permitAll()
 
-                        // Só ADMIN: cadastrar (GET e POST) e excluir produto
-                        .requestMatchers("/produtocadastrar").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/produtoexcluir/**").hasRole("ADMIN")
+                                // Só ADMIN: cadastrar (GET e POST), atualizar e excluir produto
+                                .requestMatchers("/produtocadastrar", "/produtoatualizar/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/produtoexcluir/**").hasRole("ADMIN")
 
-                        // ADMIN e USER: listar e editar produto
-                        .requestMatchers("/produtolista", "/produtoatualizar/**").hasAnyRole("ADMIN", "USER")
+                                // ADMIN e USER: apenas listar produto
+                                .requestMatchers("/produtolista").hasAnyRole("ADMIN", "USER")
 
-                        // ADMIN e USER: home e estoque
-                        .requestMatchers("/home", "/movimentacoes/**", "/movimentacaocadastrar").hasAnyRole("ADMIN", "USER")
+                                // ADMIN e USER: home e estoque
+                                .requestMatchers("/home", "/movimentacoes/**", "/movimentacaocadastrar").hasAnyRole("ADMIN", "USER")
 
-                        // Qualquer outra rota: basta estar logado
-                        .anyRequest().authenticated()
+                                // Qualquer outra rota: basta estar logado
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
