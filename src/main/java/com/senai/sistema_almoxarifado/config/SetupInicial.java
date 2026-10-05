@@ -17,16 +17,26 @@ public class SetupInicial implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (usuarioRepository.findByLogin("admin").isEmpty()) {
-            usuarioRepository.save(new UsuarioEntity(null, "Administrador do Sistema", "admin",
-                    passwordEncoder.encode("123456"), Papel.ROLE_ADMIN));
-        }
-        if (usuarioRepository.findByLogin("usuario").isEmpty()) {
-            usuarioRepository.save(new UsuarioEntity(null, "Colaborador Padrão", "usuario",
-                    passwordEncoder.encode("123456"), Papel.ROLE_USER));
+
+        // Cadastra o Giovanni (Admin)
+        if (usuarioRepository.findByLogin("giovanni").isEmpty()) {
+            usuarioRepository.save(new UsuarioEntity(null, "Giovanni", "giovanni",
+                    passwordEncoder.encode("gio123"), Papel.ROLE_ADMIN));
         }
 
-        // Usuários antigos com senha em texto puro: converte para BCrypt
+        // Cadastra a Maria (User)
+        if (usuarioRepository.findByLogin("maria").isEmpty()) {
+            usuarioRepository.save(new UsuarioEntity(null, "Maria", "maria",
+                    passwordEncoder.encode("maria123"), Papel.ROLE_USER));
+        }
+
+        // Cadastra o João (User)
+        if (usuarioRepository.findByLogin("joao").isEmpty()) {
+            usuarioRepository.save(new UsuarioEntity(null, "João", "joao",
+                    passwordEncoder.encode("jo123"), Papel.ROLE_USER));
+        }
+
+        // Atualização de segurança: garante que senhas antigas em texto puro sejam criptografadas
         usuarioRepository.findAll().forEach(u -> {
             if (!u.getSenha().startsWith("$2")) {
                 u.setSenha(passwordEncoder.encode(u.getSenha()));
