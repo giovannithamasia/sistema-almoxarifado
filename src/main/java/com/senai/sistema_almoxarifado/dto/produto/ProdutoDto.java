@@ -9,23 +9,23 @@ import jakarta.validation.constraints.Size;
 public record ProdutoDto(
 
       @Size(max = 45)
-      @NotBlank
+      @NotBlank(message = "Campo obrigatório")
       String codigo,
 
       @Size(min = 2, max = 45)
-      @NotBlank
+      @NotBlank(message = "Campo obrigatório")
       String nome,
 
       @Size(max = 45)
-      @NotBlank
+      @NotBlank(message = "Campo obrigatório")
       String caracteristicas,
 
-      @NotNull
-      @PositiveOrZero
+      @NotNull(message = "Campo obrigatório")
+      @PositiveOrZero(message = "Valor inválido")
       Integer estoqueAtual,
 
-      @NotNull
-      @PositiveOrZero
+      @NotNull(message = "Campo obrigatório")
+      @PositiveOrZero(message = "Valor inválido")
       Integer estoqueMinimo
 ) {
 
